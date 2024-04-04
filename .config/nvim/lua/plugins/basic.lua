@@ -12,6 +12,17 @@ return {
         end,
     },
     {
+        "nvim-treesitter/nvim-treesitter",
+        build = ":TSUpdate",
+        event = { "BufReadPre", "BufNewFile" },
+        config = function()
+            require("nvim-treesitter.configs").setup({
+                ensure_installed = { "comment", "cpp", "dart", "kotlin", "lua", "markdown", "python" },
+                highlight = { enable = true },
+            })
+        end,
+    },
+    {
         "voldikss/vim-floaterm",
         init = function()
             vim.g.floaterm_title = ""
@@ -31,6 +42,7 @@ return {
         end,
         keys = {
             { "<leader>ff", "<Cmd>Files<CR>", desc = "Find File" },
+            { "<leader>fg", "<Cmd>GFiles?<CR>", desc = "Find Git Status File" },
             { "<leader>fw", "<Cmd>Rg<CR>", desc = "Find Word" },
             { "<leader>fb", "<Cmd>Buffers<CR>", desc = "Find Buffer" },
             { "<leader>fhf", "<Cmd>History<CR>", desc = "Find History File" },
@@ -47,16 +59,6 @@ return {
             { "<leader><leader>", "<Plug>CommentaryLine", desc = "Comment" },
             { "<leader><leader>", "<Plug>Commentary", mode = { "v" }, desc = "Comment" },
         },
-    },
-    {
-        "Exafunction/codeium.vim",
-        init = function()
-            vim.g.codeium_no_map_tab = true
-        end,
-        event = "InsertEnter",
-        config = function()
-            vim.cmd([[imap <silent><script><nowait><expr> <c-f> codeium#Accept()]])
-        end,
     },
     {
         "nvim-neo-tree/neo-tree.nvim",
@@ -127,9 +129,6 @@ return {
                 lualine_b = { "filename" },
                 lualine_c = { "diagnostics" },
                 lualine_x = {
-                    function()
-                        return vim.fn["codeium#GetStatusString"]()
-                    end,
                     "encoding",
                     "filetype",
                 },
@@ -148,21 +147,5 @@ return {
                 },
             },
         }
-    },
-    {
-        "nvim-treesitter/nvim-treesitter",
-        build = ":TSUpdate",
-        event = { "BufReadPre", "BufNewFile" },
-        config = function()
-            require("nvim-treesitter.configs").setup({
-                ensure_installed = { "comment", "cpp", "dart", "kotlin", "lua", "markdown", "python" },
-                highlight = { enable = true },
-            })
-        end,
-    },
-    {
-        "folke/flash.nvim",
-        event = "VeryLazy",
-        opts = {},
     },
 }

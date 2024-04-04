@@ -54,11 +54,8 @@ source ~/.special.zsh
 
 # fzf
 if [ -x "$(which fzf)" ]; then
-    # mac: brew install fzf && $(brew --prefix)/opt/fzf/install
-    [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-    # archlinux: pacman -S fzf
-    [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
-    [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
+    # key bindings
+    eval "$(fzf --zsh)"
     # config
     export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
     export FZF_DEFAULT_COMMAND='fd --type file --hidden --follow --no-ignore-vcs'

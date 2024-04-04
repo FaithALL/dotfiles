@@ -28,9 +28,18 @@ local kind_icons = {
     Event = "",
     Operator = "󰆕",
     TypeParameter = "󰅲",
+    Codeium = "",
 }
 
 return {
+    {
+        "Exafunction/codeium.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+        },
+        lazy = true,
+        opts = {},
+    },
     {
         "hrsh7th/nvim-cmp",
         event = "InsertEnter",
@@ -40,6 +49,7 @@ return {
             "hrsh7th/cmp-nvim-lsp",
             "L3MON4D3/LuaSnip",
             "saadparwaiz1/cmp_luasnip",
+            "Exafunction/codeium.nvim",
         },
         opts = function()
             local cmp = require("cmp")
@@ -81,12 +91,14 @@ return {
                     { name = "path" },
                     { name = "luasnip" },
                     { name = "buffer" },
+                    { name = "codeium" },
                 }),
                 performance = {
                     max_view_entries = 50,
                 },
                 formatting = {
                     format = function(entry, vim_item)
+                        vim_item.dup = 0
                         vim_item.kind = string.format("%s %s", kind_icons[vim_item.kind], vim_item.kind)
                         local str = vim_item.abbr:match("^%s*(.+)%s*$")
                         local width = math.floor(vim.api.nvim_win_get_width(0) * 0.8)

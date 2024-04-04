@@ -12,6 +12,7 @@ LANG = "en_US.UTF-8"
 [window]
 decorations = "none"
 opacity = 0.8
+option_as_alt = "Both"
 
 [font]
 size = 18
@@ -24,25 +25,25 @@ bold_italic = { family = "SauceCodePro NFM", style = "Bold Italic" }
 style = { shape = "Beam", blinking = "Always" }
 
 [colors.primary]
-background = "0x282828"
-foreground = "0xdfbf8e"
+background = "#282828"
+foreground = "#dfbf8e"
 
 [colors.normal]
-black = "0x665c54"
-blue = "0x7daea3"
-cyan = "0x89b482"
-green = "0xa9b665"
-magenta = "0xd3869b"
-red = "0xea6962"
-white = "0xdfbf8e"
-yellow = "0xe78a4e"
+black = "#665c54"
+blue = "#7daea3"
+cyan = "#89b482"
+green = "#a9b665"
+magenta = "#d3869b"
+red = "#ea6962"
+white = "#dfbf8e"
+yellow = "#e78a4e"
 
 [colors.bright]
-black = "0x928374"
-blue = "0x7daea3"
-cyan = "0x89b482"
-green = "0xa9b665"
-magenta = "0xd3869b"
-red = "0xea6962"
-white = "0xdfbf8e"
-yellow = "0xe3a84e"
+black = "#928374"
+blue = "#7daea3"
+cyan = "#89b482"
+green = "#a9b665"
+magenta = "#d3869b"
+red = "#ea6962"
+white = "#dfbf8e"
+yellow = "#e3a84e"

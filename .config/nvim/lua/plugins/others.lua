@@ -27,31 +27,21 @@ return {
         },
     },
     {
-        "echasnovski/mini.pairs",
-        event = "VeryLazy",
-        opts = {},
-    },
-    {
-        "HiPhish/rainbow-delimiters.nvim",
-        dependencies = {
-            "nvim-treesitter/nvim-treesitter",
-        },
-    },
-    {
-        "lewis6991/gitsigns.nvim",
-        event = { "BufReadPre", "BufNewFile" },
-        enabled = false,
+        "brenoprata10/nvim-highlight-colors",
+        event = "BufReadPre",
+        ft = { "toml" },
         opts = {
         },
     },
     {
-        "RRethy/vim-illuminate",
-        event = { "BufReadPost", "BufNewFile" },
-        enabled = false,
-        config = function()
-            require("illuminate").configure({
-                delay = 200,
-            })
-        end,
+        "folke/flash.nvim",
+        event = "VeryLazy",
+        opts = {},
+    },
+    {
+        'windwp/nvim-autopairs',
+        event = "InsertEnter",
+        opts = {
+        },
     },
 }

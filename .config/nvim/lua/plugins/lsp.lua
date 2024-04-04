@@ -5,6 +5,9 @@
 return {
     {
         "neovim/nvim-lspconfig",
+        dependencies = {
+            "hrsh7th/cmp-nvim-lsp",
+        },
         config = function()
 
             vim.diagnostic.config({
@@ -49,17 +52,27 @@ return {
                     vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
                     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
                     vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+                    vim.keymap.set("n", "gc", vim.lsp.buf.incoming_calls, opts)
                     vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-                    vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
                     vim.keymap.set({ "n", "v" }, "<leader>qf", function()
-                        vim.lsp.buf.code_action{ only = { "quickfix" } }
+                        vim.lsp.buf.code_action({ apply = true })
                     end, opts)
                     vim.keymap.set({ "n", "v" }, "<leader>fo", function()
-                        vim.lsp.buf.format{ async = true }
+                        vim.lsp.buf.format({ async = true })
                     end, opts)
 
-                    vim.keymap.set("n", "<leader>sw", "<Cmd>ClangdSwitchSourceHeader<CR>", opts)
-                    vim.api.nvim_buf_create_user_command(args.buf, "DiagnosticList", vim.diagnostic.setqflist, {})
+                    local client = vim.lsp.get_client_by_id(args.data.client_id)
+                    if client.name == "clangd" then
+                        vim.keymap.set("n", "<leader>sw", "<Cmd>ClangdSwitchSourceHeader<CR>", opts)
+                    end
+
+                    vim.api.nvim_buf_create_user_command(args.buf, "DiagnosticList", vim.diagnostic.setloclist, {})
+                    vim.api.nvim_create_autocmd("DiagnosticChanged", {
+                        buffer = args.buf,
+                        callback = function()
+                            vim.diagnostic.setloclist({ open = false, })
+                        end,
+                    })
 
                     vim.api.nvim_create_autocmd("CursorHold", {
                         buffer = args.buf,
@@ -88,7 +101,7 @@ return {
 
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
             local lspconfig = require("lspconfig")
-            lspconfig.clangd.setup {
+            lspconfig.clangd.setup({
                 cmd = {
                     "clangd",
                     "--background-index",
@@ -99,11 +112,11 @@ return {
                     "--fallback-style=llvm",
                 },
                 capabilities = capabilities,
-            }
+            })
 
-            lspconfig.dartls.setup {
+            lspconfig.dartls.setup({
                 capabilities = capabilities,
-            }
+            })
         end,
     },
 }

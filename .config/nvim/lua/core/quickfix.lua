@@ -45,7 +45,10 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
             group = quickfix_enhance_augroup,
             callback = function()
                 local lnum = vim.api.nvim_win_get_cursor(0)[1]
-                local qf_item = vim.fn.getqflist()[lnum]
+                local qf_item = vim.fn.getloclist(0)[lnum]
+                if qf_item == nil then
+                    qf_item = vim.fn.getqflist()[lnum]
+                end
                 quickfix_update_preview(qf_item)
             end,
         })
