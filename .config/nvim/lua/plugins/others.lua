@@ -28,7 +28,6 @@ return {
     },
     {
         "brenoprata10/nvim-highlight-colors",
-        event = "BufReadPre",
         ft = { "toml" },
         opts = {
         },
@@ -43,5 +42,11 @@ return {
         event = "InsertEnter",
         opts = {
         },
+    },
+    {
+      "hedyhli/outline.nvim",
+      cmd = { "Outline" },
+      opts = {
+      },
     },
 }

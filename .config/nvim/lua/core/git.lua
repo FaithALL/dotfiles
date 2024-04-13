@@ -122,13 +122,13 @@ local function git_diff(bufnr)
                 count1 = tonumber(count1) or 1
                 start2 = tonumber(start2)
                 count2 = tonumber(count2) or 1
-
                 local sign_name = "GitSignsChange"
                 local count = math.max(count2, 1)
                 if count1 == 0 then
                     sign_name = "GitSignsAdd"
                 elseif count2 == 0 then
                     sign_name = "GitSignsDelete"
+                    start2 = start2 + 1
                 end
 
                 for lnum = start2, start2 + count - 1 do
@@ -147,7 +147,7 @@ end
 
 vim.api.nvim_create_user_command("ToggleBlame", toggle_blame, {})
 
-local signs = { Add = "│", Change = "│", Delete = "_" }
+local signs = { Add = "│", Change = "│", Delete = "‾" }
 for type, icon in pairs(signs) do
     local name = "GitSigns" .. type
     vim.fn.sign_define(name, { text = icon, texthl = name })

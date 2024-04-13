@@ -114,7 +114,15 @@ return {
                 capabilities = capabilities,
             })
 
+            lspconfig.cmake.setup({
+                capabilities = capabilities,
+            })
+
             lspconfig.dartls.setup({
+                capabilities = capabilities,
+            })
+
+            lspconfig.pyright.setup({
                 capabilities = capabilities,
             })
         end,

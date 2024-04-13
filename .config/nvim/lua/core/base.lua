@@ -28,3 +28,5 @@ vim.opt.shortmess:append("I")                   -- 启动时不显示intro
 vim.opt.listchars = "tab:>-,trail:-,extends:>"  -- 设置特殊字符的显示
 vim.opt.showmode = false                        -- 不显示INSERT、VISUAL等模式
 vim.opt.ignorecase = true                       -- 搜索时忽略大小写
+vim.keymap.set("n", "H", "<Cmd>bprev<CR>")      -- 切换到上一个buffer
+vim.keymap.set("n", "L", "<Cmd>bnext<CR>")      -- 切换到下一个buffer

@@ -27,13 +27,10 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 bindkey -e
 
 # 设置别名
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
 alias ls='ls --color=auto'
-alias ll='ls -alF'
+alias ll='ls -AlFh'
 alias la='ls -A'
-alias l='ls -CF'
+alias l='ls'
 
 # 命令历史记录
 HISTFILE=~/.zsh_history
