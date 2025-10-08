@@ -5,7 +5,7 @@
 local quickfix_preview_winid = nil
 
 local function quickfix_update_preview(qf_item)
-    local current_filetype = vim.api.nvim_buf_get_option(qf_item.bufnr, "filetype")
+    local current_filetype = vim.api.nvim_get_option_value("filetype", { buf = qf_item.bufnr })
     if current_filetype == "" then
         vim.api.nvim_buf_call(qf_item.bufnr, function()
             vim.cmd("filetype detect")
@@ -28,7 +28,7 @@ local function quickfix_update_preview(qf_item)
     vim.api.nvim_win_set_cursor(quickfix_preview_winid, { qf_item.lnum, 0 })
 end
 
-local function quickfix_close_preview()
+function quickfix_close_preview()
     if quickfix_preview_winid then
         vim.api.nvim_win_close(quickfix_preview_winid, true)
         quickfix_preview_winid = nil
@@ -40,6 +40,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
     pattern = "qf",
     group = quickfix_enhance_augroup,
     callback = function(args)
+        vim.opt.buflisted = false
         vim.api.nvim_create_autocmd({ "CursorMoved" }, {
             buffer = args.buf,
             group = quickfix_enhance_augroup,
@@ -49,7 +50,9 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
                 if qf_item == nil then
                     qf_item = vim.fn.getqflist()[lnum]
                 end
-                quickfix_update_preview(qf_item)
+                if qf_item ~= nil then
+                    quickfix_update_preview(qf_item)
+                end
             end,
         })
 
@@ -59,10 +62,12 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
             callback = quickfix_close_preview,
         })
 
-        vim.keymap.set("n", "<CR>", function()
-            quickfix_close_preview()
-            return "<CR>"
-        end, { buffer = args.buf, expr = true })
+        -- vim.keymap.set("n", "<CR>", function()
+        --     quickfix_close_preview()
+        --     return "<CR>"
+        -- end, { expr = true })
+
+        vim.cmd("nnoremap <CR> :lua quickfix_close_preview()<CR><CR>")
 
         vim.keymap.set("n", "<Esc>", quickfix_close_preview, { buffer = args.buf })
     end

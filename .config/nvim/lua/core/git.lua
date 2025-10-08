@@ -3,7 +3,7 @@
 -- LinuxPath: ${HOME}/.config/nvim/lua/core/git.lua
 
 local function git_function(bufnr, get_command, on_stdout)
-    if vim.api.nvim_buf_get_option(bufnr, "buftype") ~= "" then
+    if vim.api.nvim_get_option_value("buftype", { buf = bufnr }) ~= "" then
         return
     end
     local filename = vim.api.nvim_buf_get_name(bufnr)

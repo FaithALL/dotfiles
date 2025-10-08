@@ -7,9 +7,9 @@ patch:
   preset_color_schemes:
     mac_light:
       name: Mac浅色
-      horizontal: true                          # true 水平显示
       inline_preedit: false                     # false 拼音放在候选行
       candidate_format: "%c\u2005%@\u2005"      # 编号 %c 和候选词 %@ 之间用\u2005填充
+      candidate_list_layout: linear             # 候选列表水平显示
 
       corner_radius: 5                          # 窗口 圆角半径
       back_color: 0xFFFFFF                      # 窗口 背景颜色

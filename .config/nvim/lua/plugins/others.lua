@@ -33,20 +33,9 @@ return {
         },
     },
     {
-        "folke/flash.nvim",
-        event = "VeryLazy",
-        opts = {},
-    },
-    {
-        'windwp/nvim-autopairs',
+        "windwp/nvim-autopairs",
         event = "InsertEnter",
         opts = {
         },
-    },
-    {
-      "hedyhli/outline.nvim",
-      cmd = { "Outline" },
-      opts = {
-      },
     },
 }

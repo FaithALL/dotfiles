@@ -2,7 +2,7 @@
 # MacPath: ${HOME}/.config/alacritty/alacritty.toml
 # LinuxPath: ${HOME}/.config/alacritty/alacritty.toml
 
-[shell]
+[terminal.shell]
 program = "/bin/zsh"
 args = ["--login"]
 

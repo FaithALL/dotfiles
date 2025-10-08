@@ -17,7 +17,6 @@ vim.opt.tabstop = 4                             -- 一个Tab显示的空格数,�
 vim.opt.shiftwidth = 4                          -- 缩进的宽度, 用于>>, <<等
 vim.opt.softtabstop = 4                         -- 影响backspace的行为
 vim.cmd("syntax enable")                        -- 开启语法高亮
-vim.opt.termguicolors = true                    -- 开启24位色(需要终端支持)
 vim.opt.wrap = false                            -- 不折行
 vim.opt.number = true                           -- 显示行号
 vim.opt.cursorline = true                       -- 高亮当前行
@@ -30,3 +29,7 @@ vim.opt.showmode = false                        -- 不显示INSERT、VISUAL等�
 vim.opt.ignorecase = true                       -- 搜索时忽略大小写
 vim.keymap.set("n", "H", "<Cmd>bprev<CR>")      -- 切换到上一个buffer
 vim.keymap.set("n", "L", "<Cmd>bnext<CR>")      -- 切换到下一个buffer
+
+vim.cmd([[autocmd FileType c,cpp,dart setlocal commentstring=//\ %s]])
+vim.keymap.set("n", "<leader><leader>", "gcc", { remap = "true" })
+vim.keymap.set("v", "<leader><leader>", "gc", { remap = "true" })

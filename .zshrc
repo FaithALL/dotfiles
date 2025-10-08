@@ -34,8 +34,8 @@ alias l='ls'
 
 # 命令历史记录
 HISTFILE=~/.zsh_history
-SAVEHIST=4096                   # 存储在文件的命令数
-HISTSIZE=4096                   # 加载到内存的命令数
+SAVEHIST=8192                   # 存储在文件的命令数
+HISTSIZE=8192                   # 加载到内存的命令数
 setopt INC_APPEND_HISTORY       # 立即写入记录文件
 setopt HIST_EXPIRE_DUPS_FIRST   # 淘汰记录时,首先淘汰重复记录
 setopt HIST_IGNORE_ALL_DUPS     # 如果新记录是重复的,删除老的记录
@@ -52,7 +52,7 @@ source ~/.special.zsh
 # fzf
 if [ -x "$(which fzf)" ]; then
     # key bindings
-    eval "$(fzf --zsh)"
+    source <(fzf --zsh)
     # config
     export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
     export FZF_DEFAULT_COMMAND='fd --type file --hidden --follow --no-ignore-vcs'

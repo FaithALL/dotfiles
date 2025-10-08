@@ -33,12 +33,14 @@ local kind_icons = {
 
 return {
     {
-        "Exafunction/codeium.nvim",
+        "Exafunction/windsurf.nvim",
         dependencies = {
             "nvim-lua/plenary.nvim",
         },
         lazy = true,
-        opts = {},
+        config = function()
+            require("codeium").setup({})
+        end
     },
     {
         "hrsh7th/nvim-cmp",
@@ -47,21 +49,13 @@ return {
             "hrsh7th/cmp-path",
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-nvim-lsp",
-            "L3MON4D3/LuaSnip",
-            "saadparwaiz1/cmp_luasnip",
-            "Exafunction/codeium.nvim",
+            "Exafunction/windsurf.nvim",
         },
         opts = function()
             local cmp = require("cmp")
-            local luasnip = require("luasnip")
             return {
                 completion = {
                     completeopt = "menu,menuone,noinsert",
-                },
-                snippet = {
-                    expand = function(args)
-                        luasnip.lsp_expand(args.body)
-                    end,
                 },
                 mapping = cmp.mapping.preset.insert({
                     ["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
@@ -72,15 +66,15 @@ return {
                     ["<CR>"] = cmp.mapping.confirm({ select = true }),
                     ["<Tab>"] = cmp.mapping.confirm({ select = true }),
                     ["<C-j>"] = cmp.mapping(function(fallback)
-                        if luasnip.jumpable(1) then
-                            luasnip.jump(1)
+                        if vim.snippet.active({ direction = 1 }) then
+                            vim.snippet.jump(1)
                         else
                             fallback()
                         end
                     end, { "i", "s" }),
                     ["<C-k>"] = cmp.mapping(function(fallback)
-                        if luasnip.jumpable(-1) then
-                            luasnip.jump(-1)
+                        if vim.snippet.active({ direction = -1 }) then
+                            vim.snippet.jump(-1)
                         else
                             fallback()
                         end
@@ -89,8 +83,14 @@ return {
                 sources = cmp.config.sources({
                     { name = "nvim_lsp" },
                     { name = "path" },
-                    { name = "luasnip" },
-                    { name = "buffer" },
+                    {
+                        name = "buffer",
+                        option = {
+                            get_bufnrs = function()
+                                return vim.api.nvim_list_bufs()
+                            end,
+                        },
+                    },
                     { name = "codeium" },
                 }),
                 performance = {

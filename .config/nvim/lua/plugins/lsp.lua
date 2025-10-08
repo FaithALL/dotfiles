@@ -9,32 +9,26 @@ return {
             "hrsh7th/cmp-nvim-lsp",
         },
         config = function()
+            vim.lsp.set_log_level(vim.log.levels.OFF)
+            vim.lsp.inlay_hint.enable(true, nil)
 
             vim.diagnostic.config({
                 virtual_text = false,
-                -- TODO: v0.10
-                -- signs = {
-                --     text = {
-                --         [vim.diagnostic.severity.ERROR] = "",
-                --         [vim.diagnostic.severity.WARN] = "",
-                --         [vim.diagnostic.severity.INFO] = "",
-                --         [vim.diagnostic.severity.HINT] = "",
-                --     },
-                --     numhl = {
-                --         [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
-                --         [vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
-                --         [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
-                --         [vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
-                --     },
-                -- },
+                signs = {
+                    text = {
+                        [vim.diagnostic.severity.ERROR] = "",
+                        [vim.diagnostic.severity.WARN] = "",
+                        [vim.diagnostic.severity.INFO] = "",
+                        [vim.diagnostic.severity.HINT] = "",
+                    },
+                    numhl = {
+                        [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+                        [vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
+                        [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
+                        [vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
+                    },
+                },
             })
-
-            -- TODO: can replace with vim.diagnostic.config() after v0.10
-            local signs = { Error = "", Warn = "", Hint = "", Info = "" }
-            for type, icon in pairs(signs) do
-                local name = "DiagnosticSign" .. type
-                vim.fn.sign_define(name, { text = icon, texthl = name, numhl = name })
-            end
 
             vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
                 vim.lsp.handlers.hover, {
@@ -48,8 +42,6 @@ return {
                 group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
                 callback = function(args)
                     local opts = { buffer = args.buf }
-                    -- TODO: K map can remove after v0.10
-                    vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
                     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
                     vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
                     vim.keymap.set("n", "gc", vim.lsp.buf.incoming_calls, opts)
@@ -63,8 +55,22 @@ return {
 
                     local client = vim.lsp.get_client_by_id(args.data.client_id)
                     if client.name == "clangd" then
-                        vim.keymap.set("n", "<leader>sw", "<Cmd>ClangdSwitchSourceHeader<CR>", opts)
+                        vim.keymap.set("n", "<leader>sw", function()
+                            local params = { uri = vim.uri_from_bufnr(0) }
+                            vim.lsp.buf_request(0, 'textDocument/switchSourceHeader', params, function(err, result)
+                                if err then
+                                    vim.notify('Error switching source/header: ' .. err.message, vim.log.levels.ERROR)
+                                    return
+                                end
+                                if not result then
+                                    vim.notify('Corresponding file cannot be determined', vim.log.levels.WARN)
+                                    return
+                                end
+                                vim.cmd.edit(vim.uri_to_fname(result))
+                            end)
+                        end, opts)
                     end
+
 
                     vim.api.nvim_buf_create_user_command(args.buf, "DiagnosticList", vim.diagnostic.setloclist, {})
                     vim.api.nvim_create_autocmd("DiagnosticChanged", {
@@ -86,22 +92,18 @@ return {
                                 end
                             end
 
-                            local opts = {
+                            vim.diagnostic.open_float({
                                 focusable = false,
                                 close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
                                 scope = "line",
-                                prefix = "",
-                                header = "",
-                            }
-                            vim.diagnostic.open_float(nil, opts)
+                            })
                         end
                     })
                 end,
             })
 
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
-            local lspconfig = require("lspconfig")
-            lspconfig.clangd.setup({
+            vim.lsp.enable("clangd", {
                 cmd = {
                     "clangd",
                     "--background-index",
@@ -114,17 +116,13 @@ return {
                 capabilities = capabilities,
             })
 
-            lspconfig.cmake.setup({
-                capabilities = capabilities,
-            })
+            local servers = { "cmake", "dartls", "pyright", "jsonls", "lemminx" }
 
-            lspconfig.dartls.setup({
-                capabilities = capabilities,
-            })
-
-            lspconfig.pyright.setup({
-                capabilities = capabilities,
-            })
+            for _, server in ipairs(servers) do
+                vim.lsp.enable(server, {
+                    capabilities = capabilities,
+                })
+            end
         end,
     },
 }

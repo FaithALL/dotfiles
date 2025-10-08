@@ -87,8 +87,8 @@ nnoremap <silent><leader>fh:    :History:<CR>
 
 " vim-commentary
 autocmd FileType c,cpp,dart,kotlin setlocal commentstring=//\ %s
-nnoremap <silent><leader><leader>   <Plug>CommentaryLine"
-nnoremap <silent><leader><leader>   <Plug>Commentary"
+nnoremap <silent><leader><leader>   <Plug>CommentaryLine
+vnoremap <silent><leader><leader>   <Plug>Commentary
 
 " coc
 let g:coc_global_extensions = ['coc-cmake', 'coc-flutter', 'coc-pairs', 'coc-json', 'coc-clangd', 'coc-pyright']

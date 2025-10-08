@@ -17,7 +17,7 @@ return {
         event = { "BufReadPre", "BufNewFile" },
         config = function()
             require("nvim-treesitter.configs").setup({
-                ensure_installed = { "comment", "cpp", "dart", "kotlin", "lua", "markdown", "python" },
+                ensure_installed = { "cpp", "dart", "kotlin" },
                 highlight = { enable = true },
             })
         end,
@@ -48,16 +48,6 @@ return {
             { "<leader>fhf", "<Cmd>History<CR>", desc = "Find History File" },
             { "<leader>fh/", "<Cmd>History/<CR>", desc = "Find History Search" },
             { "<leader>fh:", "<Cmd>History:<CR>", desc = "Find History Command" },
-        },
-    },
-    {
-        "tpope/vim-commentary",
-        init = function()
-            vim.cmd([[autocmd FileType c,cpp,dart,kotlin setlocal commentstring=//\ %s]])
-        end,
-        keys = {
-            { "<leader><leader>", "<Plug>CommentaryLine", desc = "Comment" },
-            { "<leader><leader>", "<Plug>Commentary", mode = { "v" }, desc = "Comment" },
         },
     },
     {
@@ -93,12 +83,6 @@ return {
                 indicator = {
                     style = "none",
                 },
-                custom_filter = function(buf, _)
-                    if vim.bo[buf].filetype == "qf" then
-                        return false
-                    end
-                    return true
-                end,
                 offsets = {
                     {
                         filetype = "neo-tree",
